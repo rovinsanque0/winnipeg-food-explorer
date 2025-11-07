@@ -1,0 +1,13 @@
+<h1>About This Project</h1>
+<p>This app aggregates Winnipeg Open Data on restaurants and inspections, plus fake user reviews via the Faker gem.</p>
+
+<h3>Datasets</h3>
+<ul>
+  <li><strong>Food Establishments:</strong> name, address, ward, lat/lon, external id</li>
+  <li><strong>Inspections:</strong> restaurant external id, inspected_on, outcome, violations</li>
+  <li><strong>Faker Reviews:</strong> rating (1–5), author, comment</li>
+</ul>
+
+<h3>Schema (ERD)</h3>
+<p>Ward 1—many Restaurant; Restaurant 1—many Inspection; Restaurant 1—many Review; Restaurant many—many Category.</p>
+<img src="/erd.png" alt="ERD diagram" class="img-fluid"/>
