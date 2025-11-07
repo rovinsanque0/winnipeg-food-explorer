@@ -1,0 +1,13 @@
+<h1><%= @ward.name %></h1>
+
+<h2>Restaurants in this ward</h2>
+
+<% if @restaurants.any? %>
+  <ul>
+    <% @restaurants.each do |r| %>
+      <li><%= link_to r.name, restaurant_path(r) %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No restaurants found for this ward.</p>
+<% end %>
