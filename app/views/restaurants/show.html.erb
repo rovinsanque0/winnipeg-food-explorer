@@ -1,0 +1,28 @@
+<h1><%= @restaurant.name %></h1>
+<p class="text-muted"><%= @restaurant.address %></p>
+<p>Ward: <%= @restaurant.ward ? link_to(@restaurant.ward.name, @restaurant.ward) : "N/A" %></p>
+
+<% if @restaurant.categories.any? %>
+  <p>Categories:
+    <% @restaurant.categories.each do |c| %>
+      <%= link_to c.name, c, class: "badge bg-secondary me-1" %>
+    <% end %>
+  </p>
+<% else %>
+  <p><em>No categories yet.</em></p>
+<% end %>
+<div id="map" style="height: 320px" class="my-3"></div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    <% if @restaurant.latitude && @restaurant.longitude %>
+      var map = L.map('map').setView([<%= @restaurant.latitude %>, <%= @restaurant.longitude %>], 15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+      L.marker([<%= @restaurant.latitude %>, <%= @restaurant.longitude %>]).addTo(map)
+        .bindPopup("<%= j @restaurant.name %>");
+    <% end %>
+  });
+</script>
+
