@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  restaurant: one
+  inspected_on: 2025-11-07
+  outcome: MyString
+  violations: MyText
+
+two:
+  restaurant: two
+  inspected_on: 2025-11-07
+  outcome: MyString
+  violations: MyText
