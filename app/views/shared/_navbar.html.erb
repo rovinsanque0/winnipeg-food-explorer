@@ -1,21 +1,28 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="<%= root_path %>">Food Explorer</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container">
+    <%= link_to "Food Explorer", root_path, class: "navbar-brand fw-bold" %>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navCollapse">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navCollapse" class="collapse navbar-collapse">
-      <ul class="navbar-nav me-auto">
+      <!-- LEFT LINKS -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item"><%= link_to "Restaurants", restaurants_path, class: "nav-link" %></li>
         <li class="nav-item"><%= link_to "Wards", wards_path, class: "nav-link" %></li>
         <li class="nav-item"><%= link_to "Categories", categories_path, class: "nav-link" %></li>
         <li class="nav-item"><%= link_to "About", about_path, class: "nav-link" %></li>
       </ul>
+
+      <!-- SEARCH FORM -->
       <%= form_with url: restaurants_path, method: :get, class: "d-flex", local: true do |f| %>
-        <%= f.text_field :q, value: params[:q], class: "form-control me-2", placeholder: "Search name or address…" %>
-        <%= f.select :ward_id, options_from_collection_for_select(Ward.all, :id, :name, params[:ward_id]), include_blank: "All Wards", class: "form-select me-2" %>
-        <%= f.select :category_id, options_from_collection_for_select(Category.all, :id, :name, params[:category_id]), include_blank: "All Categories", class: "form-select me-2" %>
-        <%= f.submit "Search", class: "btn btn-primary" %>
+        <%= f.text_field :q, value: params[:q], class: "form-control me-2", placeholder: "Search…" %>
+        <%= f.select :ward_id, options_from_collection_for_select(Ward.all, :id, :name, params[:ward_id]),
+                     include_blank: "All Wards", class: "form-select me-2" %>
+        <%= f.select :category_id, options_from_collection_for_select(Category.all, :id, :name, params[:category_id]),
+                     include_blank: "All Categories", class: "form-select me-2" %>
+        <%= f.submit "Search", class: "btn btn-light" %>
       <% end %>
     </div>
   </div>

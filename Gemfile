@@ -60,4 +60,4 @@ end
 gem "faker"
 gem "httparty"
 gem "kaminari"
-
+gem "rails-erd"

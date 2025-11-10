@@ -1,0 +1,22 @@
+<h1>Add Review for <%= @restaurant.name %></h1>
+
+<%= form_with model: [@restaurant, @review] do |f| %>
+  <div class="mb-3">
+    <%= f.label :author %>
+    <%= f.text_field :author, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :rating %>
+    <%= f.number_field :rating, in: 1..5, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :comment %>
+    <%= f.text_area :comment, rows: 4, class: "form-control" %>
+  </div>
+
+  <%= f.submit "Submit Review", class: "btn btn-primary" %>
+<% end %>
+
+<p><%= link_to "Back to #{@restaurant.name}", @restaurant %></p>

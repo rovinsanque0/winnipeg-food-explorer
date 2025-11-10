@@ -1,18 +1,67 @@
-<div class="container mt-4">
-  <h1>Winnipeg Food Explorer</h1>
-  <p>
-    Welcome! This application helps you browse Winnipeg restaurants, view
-    categories, and explore health inspections and reviews. Data is collected
-    from public APIs and enhanced with generated sample data.
-  </p>
+<div class="container mt-5">
+
+  <div class="text-center mb-4">
+    <h1 class="fw-bold">Winnipeg Food Explorer</h1>
+    <p class="text-muted fs-5">
+      Discover Winnipeg restaurants, explore by ward & category,
+      and view inspection history with user reviews.
+    </p>
+  </div>
 
   <hr>
 
-  <h2>Explore</h2>
-  <ul>
-    <li><%= link_to "Browse Restaurants", restaurants_path %></li>
-    <li><%= link_to "Browse Categories", categories_path %></li>
-    <li><%= link_to "Browse Wards", wards_path %></li>
-    <li><%= link_to "About this project", about_path %></li>
-  </ul>
+  <h2 class="fw-semibold mb-3 text-center">Explore</h2>
+
+  <!-- Grid -->
+  <div class="row g-4">
+
+    <!-- Restaurants -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card shadow-sm h-100 text-center border-0">
+        <div class="card-body">
+          <div class="mb-3 fs-1">🍽️</div>
+          <h5 class="fw-semibold mb-2">Restaurants</h5>
+          <p class="text-muted small">Browse all restaurants across Winnipeg.</p>
+          <%= link_to "View", restaurants_path, class: "btn btn-primary btn-sm" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card shadow-sm h-100 text-center border-0">
+        <div class="card-body">
+          <div class="mb-3 fs-1">📁</div>
+          <h5 class="fw-semibold mb-2">Categories</h5>
+          <p class="text-muted small">Explore by cuisine type or style.</p>
+          <%= link_to "View", categories_path, class: "btn btn-primary btn-sm" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wards -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card shadow-sm h-100 text-center border-0">
+        <div class="card-body">
+          <div class="mb-3 fs-1">🗺️</div>
+          <h5 class="fw-semibold mb-2">Wards</h5>
+          <p class="text-muted small">Browse restaurants by region.</p>
+          <%= link_to "View", wards_path, class: "btn btn-primary btn-sm" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card shadow-sm h-100 text-center border-0">
+        <div class="card-body">
+          <div class="mb-3 fs-1">ℹ️</div>
+          <h5 class="fw-semibold mb-2">About</h5>
+          <p class="text-muted small">Learn how this project is built.</p>
+          <%= link_to "View", about_path, class: "btn btn-primary btn-sm" %>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>

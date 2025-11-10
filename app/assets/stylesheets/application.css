@@ -13,3 +13,72 @@
  *= require_tree .
  *= require_self
  */
+/* ===== GLOBAL TEAL THEME ===== */
+/* ===== GLOBAL TEAL THEME ===== */
+:root {
+  --primary-color: #0a9396;
+  --primary-color-hover: #08777b;
+  --text-light: #e0fbfc;
+}
+
+/* NAVBAR */
+.navbar {
+  background-color: var(--primary-color) !important;
+}
+
+.navbar .nav-link,
+.navbar-brand {
+  color: white !important;
+  font-weight: 500;
+}
+
+.navbar .nav-link:hover {
+  color: var(--text-light) !important;
+}
+
+.navbar-toggler {
+  border-color: white !important;
+}
+
+.navbar-toggler-icon {
+  filter: brightness(0) invert(1);
+}
+
+/* PRIMARY BUTTONS */
+.btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-color-hover) !important;
+  border-color: var(--primary-color-hover) !important;
+}
+
+/* SECONDARY BUTTON OPTION */
+.btn-secondary {
+  background-color: #005f63 !important;
+  border-color: #005f63 !important;
+}
+
+.btn-secondary:hover {
+  background-color: #004348 !important;
+  border-color: #004348 !important;
+}
+
+/* LINK OVERRIDES */
+a {
+  color: var(--primary-color);
+}
+a:hover {
+  color: var(--primary-color-hover);
+}
+
+/* CARD TITLES */
+.card-title a {
+  color: var(--primary-color) !important;
+  text-decoration: none;
+}
+.card-title a:hover {
+  text-decoration: underline;
+}

@@ -1,13 +1,23 @@
-<h1>About This Project</h1>
-<p>This app aggregates Winnipeg Open Data on restaurants and inspections, plus fake user reviews via the Faker gem.</p>
+<div class="container">
+  <h1 class="mb-4 fw-bold">About This Project</h1>
 
-<h3>Datasets</h3>
-<ul>
-  <li><strong>Food Establishments:</strong> name, address, ward, lat/lon, external id</li>
-  <li><strong>Inspections:</strong> restaurant external id, inspected_on, outcome, violations</li>
-  <li><strong>Faker Reviews:</strong> rating (1–5), author, comment</li>
-</ul>
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <p class="mb-0">
+        Winnipeg Food Explorer is a demo web application that helps users browse restaurants
+        across Winnipeg(address for some is fake), grouped by ward and category. Each restaurant includes inspection history,
+        user-generated reviews, and basic geographic info.
+      </p>
+    </div>
+  </div>
 
-<h3>Schema (ERD)</h3>
-<p>Ward 1—many Restaurant; Restaurant 1—many Inspection; Restaurant 1—many Review; Restaurant many—many Category.</p>
-<img src="/erd.png" alt="ERD diagram" class="img-fluid"/>
+ 
+
+  <h3 class="fw-semibold">Schema (ERD)</h3>
+
+  <div class="card shadow-sm p-3">
+    <%= image_tag "erd.png",
+        alt: "ERD diagram",
+        class: "img-fluid rounded border" %>
+  </div>
+</div>

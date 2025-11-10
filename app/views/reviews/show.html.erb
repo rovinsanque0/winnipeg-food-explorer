@@ -1,0 +1,17 @@
+<h2>Reviews</h2>
+
+<% @reviews.each do |review| %>
+  <div class="border p-3 mb-3 rounded">
+    <strong><%= review.author.presence || "Anonymous" %></strong>
+
+    <div class="text-warning">
+      <%# Print stars dynamically %>
+      <%= "★" * review.rating %><%= "☆" * (5 - review.rating) %>
+      <span class="text-dark">(<%= review.rating %>/5)</span>
+    </div>
+
+    <p class="mb-0"><%= review.comment %></p>
+  </div>
+<% end %>
+
+<%= link_to "Add Review", new_restaurant_review_path(@restaurant), class: "btn btn-primary" %>

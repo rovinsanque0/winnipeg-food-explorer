@@ -1,13 +1,29 @@
-<h1><%= @ward.name %></h1>
+<h1 class="mb-4"><%= @ward.name %></h1>
 
-<h2>Restaurants in this ward</h2>
+<h2 class="mb-3">Restaurants in this ward</h2>
 
 <% if @restaurants.any? %>
-  <ul>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
     <% @restaurants.each do |r| %>
-      <li><%= link_to r.name, restaurant_path(r) %></li>
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= link_to r.name, r, class: "stretched-link text-decoration-none" %>
+            </h5>
+            <p class="card-text text-muted"><%= r.address %></p>
+          </div>
+        </div>
+      </div>
     <% end %>
-  </ul>
+  </div>
+
+  <div class="mt-3">
+    <%= paginate @restaurants %>
+  </div>
+
 <% else %>
-  <p>No restaurants found for this ward.</p>
+  <div class="alert alert-info">
+    No restaurants found for this ward.
+  </div>
 <% end %>

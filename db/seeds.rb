@@ -21,87 +21,79 @@ Review.delete_all
 Restaurant.delete_all
 Ward.delete_all
 
+puts "Fetching Winnipeg Wards from Open Data..."
+
+WARD_URL = "https://data.winnipeg.ca/resource/t4cg-yaxs.json"
+
+begin
+  raw = URI.open(WARD_URL).read
+  data = JSON.parse(raw)
+
+  data.each do |w|
+    Ward.find_or_create_by!(
+      external_id: w["jno"],
+      name: w["name"]
+    )
+  end
+
+  puts "Seeded #{Ward.count} wards from API"
+rescue => e
+  puts "Failed to load Winnipeg wards: #{e.message}"
+  puts "Using fallback ward instead..."
+  Ward.find_or_create_by!(name: "Unknown")
+end
+
+
 def find_or_create_ward(name)
   Ward.find_or_create_by(name: name)
 end
 
-# FOOD ESTABLISHMENTS DATA IMPORT
+#restaurant
 
 ESTABLISHMENTS_CSV = Rails.root.join("db", "data", "establishments.csv")
 
-unless File.exist?(ESTABLISHMENTS_CSV)
-  puts ">> Please place establishments.csv at db/data/establishments.csv (with columns: name,address,ward,lat,lon,ext_id,phone,postal)"
-  puts ">> Seeding with a tiny fallback set so the app boots."
-  sample = [
-    { "name"=>"Pita Place", "address"=>"123 Main St", "ward"=>"Fort Rouge - East Fort Garry",
-      "lat"=>"49.884", "lon"=>"-97.147", "ext_id"=>"SAMPLE-1", "phone"=>"204-555-1111", "postal"=>"R3C 1A1" },
-    { "name"=>"Prairie Diner", "address"=>"456 Portage Ave", "ward"=>"Daniel McIntyre",
-      "lat"=>"49.890", "lon"=>"-97.152", "ext_id"=>"SAMPLE-2", "phone"=>"204-555-2222", "postal"=>"R3B 2E9" }
-  ]
-  sample.each do |row|
-    ward = find_or_create_ward(row["ward"])
-    Restaurant.create!(
-      name: row["name"],
-      address: row["address"],
-      ward: ward,
-      latitude: row["lat"],
-      longitude: row["lon"],
-      external_id: row["ext_id"],
-      phone: row["phone"],
-      postal_code: row["postal"]
-    )
-  end
-else
-  puts "Importing establishments from CSV..."
+if File.exist?(ESTABLISHMENTS_CSV)
+  puts "Importing establishments from CSV with Faker restaurant names..."
   count = 0
+
   CSV.foreach(ESTABLISHMENTS_CSV, headers: true) do |row|
-    ward = find_or_create_ward(row["ward"])
-    Restaurant.create!(
-      name: row["name"],
-      address: row["address"],
-      ward: ward,
-      latitude: row["lat"],
-      longitude: row["lon"],
-      external_id: row["ext_id"],
-      phone: row["phone"],
-      postal_code: row["postal"]
-    )
+    ward = Ward.find_by(name: row["ward"]) || Ward.find_by(name: "Unknown")
+
+  Restaurant.create!(
+    name:        row["name"],
+    address:     row["address"],
+    ward:        ward,
+    latitude:    row["lat"],
+    longitude:   row["lon"],
+    external_id: row["ext_id"],
+    phone:       row["phone"] || Faker::PhoneNumber.cell_phone,
+    postal_code: row["postal"] || "R3X 1X1"
+  )
+
     count += 1
   end
+
   puts "Imported #{count} restaurants."
-end
-
-
-# inspections
-INSPECTIONS_CSV = Rails.root.join("db", "data", "inspections.csv")
-if File.exist?(INSPECTIONS_CSV)
-  puts "Importing inspections..."
-  count = 0
-  CSV.foreach(INSPECTIONS_CSV, headers: true) do |row|
-    restaurant = Restaurant.find_by(external_id: row["ext_id"])
-    next unless restaurant
-    Inspection.create!(
-      restaurant: restaurant,
-      inspected_on: Date.parse(row["inspected_on"]),
-      outcome: row["outcome"],
-      violations: row["violations"]
-    )
-    count += 1
-  end
-  puts "Imported #{count} inspections."
 else
-  puts "No inspections.csv found; generating a few fake inspections per restaurant."
-  Restaurant.find_each do |r|
-    rand(0..3).times do
-      Inspection.create!(
-        restaurant: r,
-        inspected_on: Faker::Date.between(from: 2.years.ago, to: Date.today),
-        outcome: ["Pass", "Conditional Pass", "Fail"].sample,
-        violations: [nil, "Improper food storage; sanitizer not at correct concentration"].sample
-      )
-    end
+  puts "establishments.csv missing!"
+
+end
+
+
+#inspections
+Restaurant.find_each do |r|
+  rand(1..3).times do
+    Inspection.create!(
+      restaurant: r,
+      inspected_on: Faker::Date.between(from: 2.years.ago, to: Date.today),
+      outcome: ["Pass", "Conditional Pass", "Fail"].sample,
+      violations: [nil, "Improper food storage; sanitizer not at correct concentration"].sample
+    )
   end
 end
+
+
+
 
 #categories and categorizations
 CANDIDATE_CATEGORIES = %w[Pizza Chinese Filipino Vietnamese Cafe Bakery Diner Pub Sushi Indian Fast\ Food]

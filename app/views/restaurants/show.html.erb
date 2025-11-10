@@ -1,28 +1,122 @@
-<h1><%= @restaurant.name %></h1>
-<p class="text-muted"><%= @restaurant.address %></p>
-<p>Ward: <%= @restaurant.ward ? link_to(@restaurant.ward.name, @restaurant.ward) : "N/A" %></p>
+<div class="mb-4">
+  <h1 class="fw-bold"><%= @restaurant.name %></h1>
+  <p class="text-muted mb-1"><%= @restaurant.address %></p>
 
-<% if @restaurant.categories.any? %>
-  <p>Categories:
-    <% @restaurant.categories.each do |c| %>
-      <%= link_to c.name, c, class: "badge bg-secondary me-1" %>
-    <% end %>
+  <p class="mb-2">
+    <strong>Ward:</strong>
+    <%= @restaurant.ward ? link_to(@restaurant.ward.name, @restaurant.ward, class: "text-decoration-none") : "N/A" %>
   </p>
-<% else %>
-  <p><em>No categories yet.</em></p>
-<% end %>
-<div id="map" style="height: 320px" class="my-3"></div>
+
+  <% if @restaurant.categories.any? %>
+    <p class="mb-3">
+      <% @restaurant.categories.each do |c| %>
+        <%= link_to c.name, c, class: "badge bg-secondary me-1" %>
+      <% end %>
+    </p>
+  <% else %>
+    <p class="text-muted"><em>No categories yet.</em></p>
+  <% end %>
+</div>
+
+<!-- ========= INSPECTIONS ========= -->
+
+<div class="card shadow-sm mb-4">
+  <div class="card-header bg-dark text-white">
+    <h4 class="mb-0">Inspections</h4>
+  </div>
+
+  <div class="card-body">
+    <% if @inspections.any? %>
+      <div class="table-responsive">
+        <table class="table table-striped align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Date</th>
+              <th>Result</th>
+              <th>Violations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @inspections.each do |insp| %>
+              <tr>
+                <td><%= insp.inspected_on %></td>
+                <td>
+                  <% outcome_class =
+                    case insp.outcome
+                    when "Pass" then "text-success fw-semibold"
+                    when "Fail" then "text-danger fw-semibold"
+                    else "text-warning fw-semibold"
+                    end
+                  %>
+                  <span class="<%= outcome_class %>"><%= insp.outcome %></span>
+                </td>
+                <td><%= insp.violations.presence || "None" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-2">
+        <%= paginate @inspections %>
+      </div>
+    <% else %>
+      <p class="text-muted"><em>No inspections available.</em></p>
+    <% end %>
+  </div>
+</div>
+
+
+<!-- ========= MAP ========= -->
+<div class="card shadow-sm mb-4">
+  <div class="card-header bg-primary text-white">
+    <h4 class="mb-0">Location</h4>
+  </div>
+  <div class="card-body">
+    <div id="map" style="height: 320px" class="rounded"></div>
+  </div>
+</div>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     <% if @restaurant.latitude && @restaurant.longitude %>
       var map = L.map('map').setView([<%= @restaurant.latitude %>, <%= @restaurant.longitude %>], 15);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
-      L.marker([<%= @restaurant.latitude %>, <%= @restaurant.longitude %>]).addTo(map)
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19
+      }).addTo(map);
+
+      L.marker([<%= @restaurant.latitude %>, <%= @restaurant.longitude %>])
+        .addTo(map)
         .bindPopup("<%= j @restaurant.name %>");
     <% end %>
   });
 </script>
 
+
+<!-- ========= REVIEWS ========= -->
+
+<div class="card shadow-sm mb-4">
+  <div class="card-header bg-info text-white">
+    <h4 class="mb-0">Reviews</h4>
+  </div>
+
+  <div class="card-body">
+    <% if @reviews.any? %>
+      <% @reviews.each do |review| %>
+        <div class="border rounded p-3 mb-3">
+          <strong><%= review.author.presence || "Anonymous" %></strong>
+          <span class="text-warning"> — Rating: <%= review.rating %>/5</span>
+          <p class="mb-1"><%= review.comment %></p>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-muted"><em>No reviews yet.</em></p>
+    <% end %>
+
+    <%= link_to "Add Review", new_restaurant_review_path(@restaurant), class: "btn btn-primary mt-2" %>
+  </div>
+</div>

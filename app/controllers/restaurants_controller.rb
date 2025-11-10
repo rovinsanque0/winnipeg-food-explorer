@@ -7,10 +7,12 @@ class RestaurantsController < ApplicationController
       .order(:name)
       .page(params[:page]).per(20)
   end
-
+  
   def show
     @restaurant = Restaurant.find(params[:id])
     @inspections = @restaurant.inspections.order(inspected_on: :desc).page(params[:page]).per(10)
     @reviews = @restaurant.reviews.order(created_at: :desc).limit(10)
   end
+
+
 end
